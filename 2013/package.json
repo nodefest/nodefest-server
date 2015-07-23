@@ -1,0 +1,8 @@
+{
+  "name": "nodefest2013_server",
+  "version": "0.0.1",
+  "main": "index.js",
+  "dependencies": {
+    "socket.io": "0.9.3"
+  }
+}
