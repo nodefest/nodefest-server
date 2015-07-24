@@ -312,8 +312,9 @@ var paint = function () {
     timestamp: Date.now()
   };
 
+  rhino.shapes[ order ].paint = paint;
+
   // 足したのコレだけ
-  //rhino.shapes[ order ].paint = paint;
   RhinoPaintoon.paint(order, JSON.stringify(paint));
 
 }
