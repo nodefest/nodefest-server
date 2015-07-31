@@ -4,7 +4,7 @@
   var mqtt = global.mqtt;
 
   var RhinoPaintoon = function() {
-    this.client = mqtt.connect('ws://localhost:8080');
+    this.client = mqtt.connect('ws://222.158.218.158');
     this.client.on('connect', this._onConnect.bind(this));
   };
 

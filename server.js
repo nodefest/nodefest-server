@@ -8,7 +8,7 @@
 var mosca = require('mosca');
 var server = new mosca.Server({
   http: {
-    port: process.env.PORT || 8080,
+    port: process.env.PORT || 80,
     bundle: true,
     static: './'
   }
