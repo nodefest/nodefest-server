@@ -8,11 +8,12 @@
 var mosca = require('mosca');
 var server = new mosca.Server({
   http: {
-    port: process.env.PORT || 80,
-    bundle: true,
-    static: './'
+    port: process.env.PORT || 80
   }
 });
+if (process.env.NODE_ENV === 'production') {
+  console.log = function() {};
+}
 
 
 var clientData = {
@@ -43,6 +44,7 @@ server.on('published', function(packet) {
     var order = payloadArr[0];
     var paint = JSON.parse(payloadArr[1]);
 
+    // データ更新
     paintData[order] = paint;
 
     // その結果どうなったかまとめてを返す
@@ -59,6 +61,11 @@ server.on('subscribed', function(topic) {
   server.publish({
     topic: 'nodefest-2015/rhino/sync',
     payload: JSON.stringify(paintData)
+  });
+  // このタイミングでだけ、人数も反映する
+  server.publish({
+    topic: 'nodefest-2015/client/sync',
+    payload: JSON.stringify(clientData)
   });
 });
 
