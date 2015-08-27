@@ -8,7 +8,8 @@
 var mosca = require('mosca');
 var server = new mosca.Server({
   http: {
-    port: process.env.PORT || 80
+    port: process.env.PORT || 80,
+    logger: { level: 'warn' }
   }
 });
 if (process.env.NODE_ENV === 'production') {
@@ -39,6 +40,7 @@ server.on('published', function(packet) {
       topic: 'nodefest-2015/rhino/sync',
       payload: JSON.stringify(paintData)
     });
+    console.log(paintData);
   }
 });
 
