@@ -20,6 +20,11 @@ if (process.env.NODE_ENV === 'production') {
 var paintData = {
   // order: { color: [], timestamp: 1234 }
 };
+// ここに参戦人数がはいる
+var clientData = {
+  // #COLOR_A: 0,
+  // #COLOR_B: 1
+};
 
 server.on('published', function(packet) {
   console.log('published', packet.topic);
@@ -51,6 +56,36 @@ server.on('subscribed', function(topic) {
     topic: 'nodefest-2015/rhino/sync',
     payload: JSON.stringify(paintData)
   });
+
+  server.publish({
+    topic: 'nodefest-2015/client/sync',
+    payload: JSON.stringify(clientData)
+  });
+});
+
+server.on('clientConnected', function(client) {
+  var color = client.id.split('@')[1];
+  if (color in clientData) {
+    clientData[color]++;
+  } else {
+    clientData[color] = 1;
+  }
+  console.log('client connected', clientData);
+});
+
+server.on('clientDisconnected', function(client) {
+  var color = client.id.split('@')[1];
+  if (color in clientData) {
+    clientData[color]--;
+  } else {
+    clientData[color] = 0;
+  }
+  // 人が減った瞬間は別途知らせないといけない
+  server.publish({
+    topic: 'nodefest-2015/client/sync',
+    payload: JSON.stringify(clientData)
+  });
+  console.log('client disconnected', clientData);
 });
 
 server.on('ready', function() {
